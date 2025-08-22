@@ -1,18 +1,20 @@
 Bun.serve({
+  port: 3000, // Port to listen on
   // `routes` requires Bun v1.2.3+
   routes: {
+    "/": new Response("Welcome to the Bun server!"),
     // Static routes
     "/api/status": new Response("OK"),
 
     // Dynamic routes
-    "/users/:id": req => {
+    "/users/:id": (req) => {
       return new Response(`Hello User ${req.params.id}!`);
     },
 
     // Per-HTTP method handlers
     "/api/posts": {
       GET: () => new Response("List posts"),
-      POST: async req => {
+      POST: async (req) => {
         const body = await req.json();
         return Response.json({ created: true, ...body });
       },
@@ -23,13 +25,6 @@ Bun.serve({
 
     // Redirect from /blog/hello to /blog/hello/world
     "/blog/hello": Response.redirect("/blog/hello/world"),
-
-    // Serve a file by buffering it in memory
-    "/favicon.ico": new Response(await Bun.file("./favicon.ico").bytes(), {
-      headers: {
-        "Content-Type": "image/x-icon",
-      },
-    }),
   },
 
   // (optional) fallback for unmatched routes:
