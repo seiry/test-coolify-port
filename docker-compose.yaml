@@ -1,0 +1,18 @@
+# slogan: chat next
+# port: 3000
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    environment:
+      - test=$TEST
+
+    healthcheck:
+      test: "curl -sf http://127.0.0.1:3000/ || exit 1"
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
